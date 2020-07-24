@@ -11,6 +11,7 @@ const Gamepads = (() => {
                 'disconnect': []
             }
             this._supported = navigator.getGamepads !== undefined
+            this._useTimeout = false
             GamepadHandler._instance = this
         }
     
@@ -21,10 +22,11 @@ const Gamepads = (() => {
         get supported() {
             return this._supported
         }
-    
-        start() {
+
+        start(options = { useTimeout: false }) {
             this._paused = false
-            this._run()
+            this._useTimeout = options.useTimeout;
+            this._run(options.useTimeout)
         }
     
         stop() {
@@ -74,7 +76,12 @@ const Gamepads = (() => {
         _run() {
             if (this._supported && !this._paused) {
                 this.poll()
-                requestAnimationFrame(() => this._run(this))
+
+                if (this._useTimeout) {
+                    setTimeout(() => this._run(this));
+                } else {
+                    requestAnimationFrame(() => this._run(this))
+                }
             }
         }
     }
