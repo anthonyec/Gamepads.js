@@ -336,6 +336,23 @@ The joystick deadzone to apply. Defaults to `0.10`. Must be set to range `[0, 1)
 
 A dictionary object containing button/axis `index` values for the `standard` gamepad mapping. Use `StandardMapping.Button` for buttons and `StandardMapping.Axis` for axes.
 
+## Using without `requestAnimationFrame` ##
+
+In some enviroments `window.requestionAnimationFrame` does not work as expected, for example in a persistant `background` script in a Chrome Extension.
+
+In this case you can pass an option to the `start()` method.
+
+```javascript
+Gamepads.start({
+   useTimeout: true
+});
+```
+
+This will use `setTimeout` to poll for gamepad events.
+
+Note, it is **not recommended** to use this polling method in most use cases. Using `setTimeout` or `setInterval` instead of `requestAnimationFrame` has [performance drawbacks](https://flaviocopes.com/requestanimationframe/#optimization).
+
+
 # TODO
 
 * Improve browser compatibility.
